@@ -1,0 +1,84 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap");
+@import "tailwindcss";
+@import "@dlbcodes/my-design-system/tokens.css";
+@source "../node_modules/@dlbcodes/my-design-system/dist";
+
+@theme {
+  --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* second brand hue lifted from the library's accent-pro token, used
+     only for the "Console" side of the reskin demo */
+  --color-console-bg: oklch(15% 0.01 285);
+  --color-console-surface: oklch(20% 0.012 285);
+  --color-console-border: oklch(28% 0.014 285);
+  --color-console-text: oklch(92% 0.005 285);
+  --color-console-text-dim: oklch(62% 0.01 285);
+  --color-console-accent: oklch(45.78% 0.143 287.89);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-bg-base);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-brand-100);
+  color: var(--color-text-inverse);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand-100);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+[data-theme="console"] {
+  --color-text-primary: var(--color-console-text);
+  --color-text-secondary: var(--color-console-text-dim);
+  --color-text-tertiary: var(--color-console-text-dim);
+  --color-text-disabled: var(--color-console-border);
+  --color-text-inverse: var(--color-console-bg);
+
+  --color-bg-base: var(--color-console-bg);
+  --color-bg-surface: var(--color-console-surface);
+  --color-bg-raised: var(--color-console-surface);
+  --color-bg-elevated: var(--color-console-surface);
+  --color-bg-subtle: var(--color-console-border);
+  --color-bg-strong: var(--color-console-border);
+  --color-bg-inverse: var(--color-console-text);
+
+  --color-border-subtle: var(--color-console-border);
+  --color-border-default: var(--color-console-border);
+  --color-border-strong: var(--color-console-text-dim);
+  --color-border-dark: var(--color-console-text);
+
+  --color-brand-100: var(--color-console-accent);
+  --color-brand-200: var(--color-console-accent);
+
+  color-scheme: dark;
+  background: var(--color-bg-base);
+  color: var(--color-text-primary);
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
