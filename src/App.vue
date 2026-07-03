@@ -16,41 +16,17 @@ import {
 import { useClipboard, onKeyStroke } from "@vueuse/core";
 import ContactModal from "./components/ContactModal.vue";
 import CommandPalette from "./components/CommandPalette.vue";
+import { projects } from "./data/projects";
+import { site } from "./data/site";
 
-const projects = [
-    {
-        slug: "dlbcodes/my-design-system",
-        href: "https://ui.dlbcodes.com",
-        description:
-            "A compound, tokenized Vue 3 component library. Built on Headless UI.",
-    },
-    {
-        slug: "dlbcodes/assistant",
-        href: "https://assistant.dlbcodes.com",
-        description:
-            "Soft, conversational template — a consumer AI-assistant UI.",
-    },
-    {
-        slug: "dlbcodes/console",
-        href: "https://console.dlbcodes.com",
-        description:
-            "Dense, Vercel-style dashboard. Same library, opposite look.",
-    },
-    {
-        slug: "dlbcodes/playground",
-        href: "https://playground.dlbcodes.com",
-        description:
-            "Live customizer — reskin every component by swapping tokens.",
-    },
-];
-
-const email = "dlobocode@gmail.com";
 const contactOpen = ref(false);
 const commandOpen = ref(false);
 
-const { copy, copied } = useClipboard({ source: email });
+const { copy, copied } = useClipboard({ source: site.email });
 
-const isMac = navigator.platform.toLowerCase().includes("mac");
+// userAgent is the robust check; navigator.platform is deprecated
+const isMac = /mac|iphone|ipad|ipod/i.test(navigator.userAgent);
+const modKey = isMac ? "⌘" : "Ctrl";
 
 onKeyStroke("o", (e) => {
     if (!e.metaKey && !e.ctrlKey) return;
@@ -66,53 +42,69 @@ onKeyStroke("k", (e) => {
 </script>
 
 <template>
-    <div class="mx-auto max-w-xl px-6 py-20 sm:py-28">
+    <main class="mx-auto max-w-xl px-6 py-20 sm:py-28">
         <Button
             variant="outline"
             size="icon-sm"
-            @click="commandOpen = true"
             class="mb-4"
+            aria-label="Open command palette"
+            @click="commandOpen = true"
         >
-            <PhMagnifyingGlass />
-            <KbdGroup>
-                <Kbd>{{ isMac ? "⌘" : "Ctrl" }}</Kbd>
+            <PhMagnifyingGlass aria-hidden="true" />
+            <KbdGroup aria-hidden="true">
+                <Kbd>{{ modKey }}</Kbd>
                 <Kbd>K</Kbd>
             </KbdGroup>
         </Button>
-        <p
-            class="mb-10 flex flex-wrap items-center gap-x-2 text-sm text-text-secondary font-mono"
-        >
-            <span class="text-text-primary">dlbcodes</span>
-            /
-            <a
-                href="https://twitter.com/dlbcode"
-                target="_blank"
-                class="underline decoration-border-strong underline-offset-4 outline-none focus-visible:text-brand-100 hover:text-text-primary"
-                >twitter</a
+
+        <nav aria-label="Social links">
+            <p
+                class="mb-10 flex flex-wrap items-center gap-x-2 text-sm text-text-secondary font-mono"
             >
-            /
-            <a
-                href="https://github.com/dlbcodes"
-                target="_blank"
-                class="underline decoration-border-strong underline-offset-4 outline-none focus-visible:text-brand-100 hover:text-text-primary"
-                >github</a
-            >
-            /
-            <button
-                type="button"
-                class="inline-flex items-center gap-1 underline decoration-border-strong underline-offset-4 outline-none focus-visible:text-brand-100 hover:text-text-primary"
-                @click="copy(email)"
-            >
-                {{ email }}
-                <PhCheck v-if="copied" class="size-3.5" />
-                <PhCopy v-else class="size-3.5" />
-            </button>
-        </p>
+                <span class="text-text-primary">dlbcodes</span>
+                <span aria-hidden="true">/</span>
+                <a
+                    :href="site.socials.twitter"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="underline decoration-border-strong underline-offset-4 outline-none focus-visible:text-brand-100 hover:text-text-primary"
+                    >twitter</a
+                >
+                <span aria-hidden="true">/</span>
+                <a
+                    :href="site.socials.github"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="underline decoration-border-strong underline-offset-4 outline-none focus-visible:text-brand-100 hover:text-text-primary"
+                    >github</a
+                >
+                <span aria-hidden="true">/</span>
+                <button
+                    type="button"
+                    class="inline-flex items-center gap-1 underline decoration-border-strong underline-offset-4 outline-none focus-visible:text-brand-100 hover:text-text-primary"
+                    :aria-label="
+                        copied ? 'Email copied' : `Copy email ${site.email}`
+                    "
+                    @click="copy(site.email)"
+                >
+                    {{ site.email }}
+                    <PhCheck
+                        v-if="copied"
+                        class="size-3.5"
+                        aria-hidden="true"
+                    />
+                    <PhCopy v-else class="size-3.5" aria-hidden="true" />
+                </button>
+                <span class="sr-only" role="status" aria-live="polite">
+                    {{ copied ? "Email copied to clipboard" : "" }}
+                </span>
+            </p>
+        </nav>
 
         <Avatar name="Daniel" src="/AvatarTwitter-min.png" size="xl" />
 
         <h1
-            class="font-display text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl"
+            class="font-display text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl pt-2"
         >
             I'm Daniel, a frontend developer and indie founder based in Porto.
         </h1>
@@ -121,6 +113,8 @@ onKeyStroke("k", (e) => {
             I built
             <a
                 href="https://www.npmjs.com/package/@dlbcodes/my-design-system"
+                target="_blank"
+                rel="noopener noreferrer"
                 class="text-text-primary underline decoration-border-strong underline-offset-4 outline-none focus-visible:text-brand-100"
                 >dlbcodes/my-design-system</a
             >, and the templates below to prove it doesn't make every product
@@ -136,43 +130,49 @@ onKeyStroke("k", (e) => {
                 @click="contactOpen = true"
             >
                 Say hi
-                <KbdGroup>
-                    <Kbd>{{ isMac ? "⌘" : "Ctrl" }}</Kbd>
+                <KbdGroup aria-hidden="true">
+                    <Kbd>{{ modKey }}</Kbd>
                     <Kbd>O</Kbd>
                 </KbdGroup>
             </Button>
         </div>
 
-        <div class="mt-16 space-y-8">
-            <a
-                v-for="p in projects"
-                :key="p.slug"
-                :href="p.href"
-                target="_blank"
-                class="group block rounded-md outline-none"
-            >
-                <p
-                    class="relative flex gap-x-2 font-mono text-sm text-text-primary transition-colors group-focus-visible:text-brand-100"
-                >
-                    <PhArrowRight
-                        class="absolute right-full top-1/2 mr-1 size-3.5 shrink-0 -translate-y-1/2 translate-x-1 opacity-0 transition-all duration-150 group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100"
-                    />
-                    {{ p.slug }}
-                    <Kbd
-                        class="hidden group-focus-visible:flex"
-                        aria-hidden="true"
-                        >↵</Kbd
+        <nav aria-label="Projects" class="mt-16">
+            <ul class="space-y-8">
+                <li v-for="p in projects" :key="p.slug">
+                    <a
+                        :href="p.href"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="group block rounded-md outline-none"
                     >
-                </p>
-                <p class="text-sm text-text-secondary">{{ p.description }}</p>
-            </a>
-        </div>
+                        <span
+                            class="relative flex gap-x-2 font-mono text-sm text-text-primary transition-colors group-focus-visible:text-brand-100"
+                        >
+                            <PhArrowRight
+                                class="absolute right-full top-1/2 mr-1 size-3.5 shrink-0 -translate-y-1/2 translate-x-1 opacity-0 transition-all duration-150 group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100"
+                                aria-hidden="true"
+                            />
+                            {{ p.slug }}
+                            <Kbd
+                                class="hidden group-focus-visible:flex"
+                                aria-hidden="true"
+                                >↵</Kbd
+                            >
+                        </span>
+                        <span class="block text-sm text-text-secondary">{{
+                            p.description
+                        }}</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
 
-        <ContactModal v-model="contactOpen" :email="email" />
+        <ContactModal v-model="contactOpen" :email="site.email" />
         <CommandPalette
             v-model="commandOpen"
-            :email="email"
+            :email="site.email"
             @contact="contactOpen = true"
         />
-    </div>
+    </main>
 </template>

@@ -19,8 +19,11 @@ import {
     PhCopy,
     PhGithubLogo,
     PhTwitterLogo,
+    PhArrowSquareOut,
 } from "@phosphor-icons/vue";
 import type { Component } from "vue";
+import { projects } from "../data/projects";
+import { site } from "../data/site";
 
 const props = defineProps<{ email: string }>();
 const emit = defineEmits<{ contact: [] }>();
@@ -36,62 +39,78 @@ interface Command {
     run: () => void;
 }
 
-const commands: Command[] = [
+interface CommandGroup {
+    heading: string;
+    commands: Command[];
+}
+
+// pick an icon per project slug; fall back to a generic one
+const projectIcons: Record<string, Component> = {
+    "dlbcodes/my-design-system": PhPackage,
+    "dlbcodes/assistant": PhChatCircle,
+    "dlbcodes/amalia-chat": PhChatCircle,
+    "dlbcodes/console": PhTerminalWindow,
+    "dlbcodes/playground": PhSliders,
+};
+
+const groups: CommandGroup[] = [
     {
-        id: "library",
-        label: "Open the component library",
-        icon: PhPackage,
-        keywords: "ui design system npm",
-        run: () => window.open("https://ui.dlbcodes.com", "_blank"),
+        heading: "Projects",
+        commands: projects.map((p) => ({
+            id: p.slug,
+            label: p.slug,
+            icon: projectIcons[p.slug] ?? PhArrowSquareOut,
+            keywords: p.description,
+            run: () => window.open(p.href, "_blank", "noopener,noreferrer"),
+        })),
     },
     {
-        id: "assistant",
-        label: "Open the Assistant template",
-        icon: PhChatCircle,
-        keywords: "soft consumer ai",
-        run: () => window.open("https://assistant.dlbcodes.com", "_blank"),
+        heading: "Contact",
+        commands: [
+            {
+                id: "say-hi",
+                label: "Say hi",
+                icon: PhEnvelopeSimple,
+                keywords: "contact form email message",
+                run: () => emit("contact"),
+            },
+            {
+                id: "copy-email",
+                label: `Copy email — ${props.email}`,
+                icon: PhCopy,
+                keywords: "email address clipboard",
+                run: () => copy(props.email),
+            },
+        ],
     },
     {
-        id: "console",
-        label: "Open the Console template",
-        icon: PhTerminalWindow,
-        keywords: "dense dashboard vercel",
-        run: () => window.open("https://console.dlbcodes.com", "_blank"),
-    },
-    {
-        id: "playground",
-        label: "Open the Playground",
-        icon: PhSliders,
-        keywords: "customizer tokens reskin",
-        run: () => window.open("https://playground.dlbcodes.com", "_blank"),
-    },
-    {
-        id: "say-hi",
-        label: "Say hi",
-        icon: PhEnvelopeSimple,
-        keywords: "contact form email message",
-        run: () => emit("contact"),
-    },
-    {
-        id: "copy-email",
-        label: `Copy email — ${props.email}`,
-        icon: PhCopy,
-        keywords: "email address clipboard",
-        run: () => copy(props.email),
-    },
-    {
-        id: "github",
-        label: "Open GitHub",
-        icon: PhGithubLogo,
-        keywords: "code repos",
-        run: () => window.open("https://github.com/dlbcodes", "_blank"),
-    },
-    {
-        id: "twitter",
-        label: "Open Twitter",
-        icon: PhTwitterLogo,
-        keywords: "x social",
-        run: () => window.open("https://twitter.com/dlbcode", "_blank"),
+        heading: "Social",
+        commands: [
+            {
+                id: "github",
+                label: "Open GitHub",
+                icon: PhGithubLogo,
+                keywords: "code repos",
+                run: () =>
+                    window.open(
+                        site.socials.github,
+                        "_blank",
+                        "noopener,noreferrer",
+                    ),
+            },
+            {
+                id: "twitter",
+                label: "Open Twitter",
+                icon: PhTwitterLogo,
+                keywords: "x social",
+                run: () =>
+                    window.open(
+                        site.socials.twitter,
+                        "_blank",
+                        "noopener,noreferrer",
+                    ),
+            },
+        ],
     },
 ];
 
@@ -100,13 +119,28 @@ const selected = ref(0);
 const inputRef = ref<InstanceType<typeof Input>>();
 const listRef = ref<HTMLElement>();
 
-const results = computed<Command[]>(() => {
+// filtered groups: keep only groups with matches, for rendering with headings
+const filteredGroups = computed<CommandGroup[]>(() => {
     const q = query.value.trim().toLowerCase();
-    if (!q) return commands;
-    return commands.filter((c) =>
-        `${c.label} ${c.keywords ?? ""}`.toLowerCase().includes(q),
-    );
+    if (!q) return groups;
+    return groups
+        .map((g) => ({
+            heading: g.heading,
+            commands: g.commands.filter((c) =>
+                `${c.label} ${c.keywords ?? ""}`.toLowerCase().includes(q),
+            ),
+        }))
+        .filter((g) => g.commands.length > 0);
 });
+
+// flat list of matches, for keyboard navigation across all groups
+const flatResults = computed<Command[]>(() =>
+    filteredGroups.value.flatMap((g) => g.commands),
+);
+
+// map a command id to its index in the flat list (for highlight + aria)
+const indexOf = (id: string): number =>
+    flatResults.value.findIndex((c) => c.id === id);
 
 const run = (cmd: Command): void => {
     open.value = false;
@@ -114,7 +148,7 @@ const run = (cmd: Command): void => {
 };
 
 const move = (delta: number): void => {
-    const count = results.value.length;
+    const count = flatResults.value.length;
     if (!count) return;
     selected.value = (selected.value + delta + count) % count;
 };
@@ -128,7 +162,7 @@ const onKeydown = (e: KeyboardEvent): void => {
         move(-1);
     } else if (e.key === "Enter") {
         e.preventDefault();
-        const cmd = results.value[selected.value];
+        const cmd = flatResults.value[selected.value];
         if (cmd) run(cmd);
     }
 };
@@ -142,7 +176,7 @@ watch(open, async (isOpen) => {
     (root?.querySelector("input") ?? root)?.focus();
 });
 
-watch(results, () => (selected.value = 0));
+watch(flatResults, () => (selected.value = 0));
 
 watch(selected, async () => {
     await nextTick();
@@ -151,7 +185,6 @@ watch(selected, async () => {
         ?.scrollIntoView({ block: "nearest" });
 });
 
-// global Cmd/Ctrl+K to open the palette
 onKeyStroke("k", (e) => {
     if (!e.metaKey && !e.ctrlKey) return;
     e.preventDefault();
@@ -172,8 +205,8 @@ onKeyStroke("k", (e) => {
                     aria-controls="command-list"
                     aria-expanded="true"
                     :aria-activedescendant="
-                        results[selected]
-                            ? `command-${results[selected].id}`
+                        flatResults[selected]
+                            ? `command-${flatResults[selected].id}`
                             : undefined
                     "
                     @keydown="onKeydown"
@@ -185,48 +218,59 @@ onKeyStroke("k", (e) => {
                 </Input>
             </div>
 
-            <ul
+            <div
                 id="command-list"
                 ref="listRef"
                 role="listbox"
+                aria-label="Commands"
                 class="max-h-80 overflow-y-auto p-2"
             >
-                <li
-                    v-for="(cmd, i) in results"
-                    :id="`command-${cmd.id}`"
-                    :key="cmd.id"
-                    :data-index="i"
-                    role="option"
-                    :aria-selected="i === selected"
-                >
-                    <button
-                        type="button"
-                        tabindex="-1"
-                        class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors"
-                        :class="
-                            i === selected
-                                ? 'bg-bg-surface text-text-primary'
-                                : 'text-text-secondary hover:bg-bg-surface'
-                        "
-                        @click="run(cmd)"
-                        @mousemove="selected = i"
+                <template v-for="group in filteredGroups" :key="group.heading">
+                    <!-- group heading -->
+                    <div
+                        role="presentation"
+                        class="px-3 pb-1 pt-3 text-xs font-medium uppercase tracking-wide text-text-tertiary first:pt-1"
                     >
-                        <component
-                            :is="cmd.icon"
-                            class="size-4 shrink-0 text-text-tertiary"
-                            aria-hidden="true"
-                        />
-                        {{ cmd.label }}
-                    </button>
-                </li>
+                        {{ group.heading }}
+                    </div>
 
-                <li
-                    v-if="!results.length"
+                    <div
+                        v-for="cmd in group.commands"
+                        :id="`command-${cmd.id}`"
+                        :key="cmd.id"
+                        :data-index="indexOf(cmd.id)"
+                        role="option"
+                        :aria-selected="indexOf(cmd.id) === selected"
+                    >
+                        <button
+                            type="button"
+                            tabindex="-1"
+                            class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors"
+                            :class="
+                                indexOf(cmd.id) === selected
+                                    ? 'bg-bg-surface text-text-primary'
+                                    : 'text-text-secondary hover:bg-bg-surface'
+                            "
+                            @click="run(cmd)"
+                            @mousemove="selected = indexOf(cmd.id)"
+                        >
+                            <component
+                                :is="cmd.icon"
+                                class="size-4 shrink-0 text-text-tertiary"
+                                aria-hidden="true"
+                            />
+                            {{ cmd.label }}
+                        </button>
+                    </div>
+                </template>
+
+                <div
+                    v-if="!flatResults.length"
                     class="px-3 py-6 text-center text-sm text-text-tertiary"
                 >
                     No commands found.
-                </li>
-            </ul>
+                </div>
+            </div>
         </ModalContent>
 
         <ModalFooter
