@@ -10,6 +10,7 @@ import {
 import { useClipboard, onKeyStroke } from "@vueuse/core";
 import ContactModal from "./components/ContactModal.vue";
 import CommandPalette from "./components/CommandPalette.vue";
+import TemplateShowcase from "./components/TemplateShowcase.vue";
 import { projects } from "./data/projects";
 import { site } from "./data/site";
 
@@ -161,6 +162,8 @@ onKeyStroke("k", (e) => {
                 </li>
             </ul>
         </nav>
+
+        <TemplateShowcase />
 
         <ContactModal v-model="contactOpen" :email="site.email" />
         <CommandPalette

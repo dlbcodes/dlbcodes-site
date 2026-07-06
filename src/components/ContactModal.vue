@@ -68,10 +68,15 @@ async function handleSubmit() {
     try {
         const res = await fetch(FORMSPREE_ENDPOINT, {
             method: "POST",
-            headers: { Accept: "application/json" },
-            body: new FormData(
-                document.getElementById("contact-form") as HTMLFormElement,
-            ),
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                name: name.value,
+                email: senderEmail.value,
+                message: message.value,
+            }),
         });
         if (!res.ok) throw new Error("Request failed");
         status.value = "sent";
@@ -85,7 +90,6 @@ async function handleSubmit() {
 
 function resetAndClose() {
     emit("update:modelValue", false);
-    // small delay so the modal doesn't visibly flash back to idle mid-close
     setTimeout(() => (status.value = "idle"), 300);
 }
 </script>
@@ -156,6 +160,7 @@ function resetAndClose() {
                     <FieldContent>
                         <Textarea
                             v-model="message"
+                            autosize
                             name="message"
                             placeholder="What's this about?"
                         />
