@@ -36,8 +36,9 @@ export const projects: Project[] = [
 			"Dense, Vercel-style dashboard. Same library, opposite look.",
 		images: [
 			"/images/console/Home.png",
-			"/images/console/Team.png",
 			"/images/console/WorkspaceSwitcher.png",
+			"/images/console/Team.png",
+			"/images/console/CommandPalette.png",
 		],
 	},
 	{
@@ -47,10 +48,10 @@ export const projects: Project[] = [
 		description:
 			"Live customizer — reskin every component by swapping tokens.",
 		images: [
-			"/images/assistant/Home.png",
-			"/images/assistant/ComposerWithFiles.png",
-			"/images/assistant/ComposerFilesDropdown.png",
-			// "/images/assistant/UserMenu.png",
+			"/images/playground/Home.png",
+			"/images/playground/Neutral.png",
+			"/images/playground/Sidebar.png",
+			"/images/playground/Pricing.png",
 		],
 	},
 	{
@@ -59,5 +60,10 @@ export const projects: Project[] = [
 		repo: "https://github.com/dlbcodes/dlbcodes-amalia-chat",
 		description:
 			"The assistant UI, wired to AMALIA — Portugal's open-source LLM.",
+		images: [
+			"/images/amalia/Home.png",
+			"/images/amalia/Sidebar.png",
+			"/images/amalia/CommandPalette.png",
+		],
 	},
 ];
