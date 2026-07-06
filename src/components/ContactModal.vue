@@ -37,7 +37,7 @@ const status = ref<"idle" | "sending" | "sent" | "error">("idle");
 const errors = reactive({ name: "", email: "", message: "" });
 
 // swap in your own Formspree form id: https://formspree.io/forms
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mdarbqqk";
 
 function validate() {
     errors.name = name.value.trim() ? "" : "Name is required.";
@@ -117,10 +117,11 @@ function resetAndClose() {
             <form
                 v-else
                 id="contact-form"
+                novalidate
                 class="flex flex-col gap-4"
                 @submit.prevent="handleSubmit"
             >
-                <Field :invalid="!!errors.name">
+                <Field required :invalid="!!errors.name">
                     <FieldLabel>Name</FieldLabel>
                     <FieldContent>
                         <Input
@@ -134,7 +135,7 @@ function resetAndClose() {
                     }}</FieldError>
                 </Field>
 
-                <Field :invalid="!!errors.email">
+                <Field required :invalid="!!errors.email">
                     <FieldLabel>Email</FieldLabel>
                     <FieldContent>
                         <Input
@@ -150,7 +151,7 @@ function resetAndClose() {
                     }}</FieldError>
                 </Field>
 
-                <Field :invalid="!!errors.message">
+                <Field required :invalid="!!errors.message">
                     <FieldLabel>Message</FieldLabel>
                     <FieldContent>
                         <Textarea
