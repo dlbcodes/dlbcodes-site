@@ -7,7 +7,7 @@ import {
     Input,
     Kbd,
     KbdGroup,
-} from "@dlbcodes/my-design-system";
+} from "@dlbcodes/ui";
 import { useClipboard, onKeyStroke } from "@vueuse/core";
 import {
     PhMagnifyingGlass,

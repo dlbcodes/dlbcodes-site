@@ -1,12 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import {
-    Badge,
-    Avatar,
-    Button,
-    KbdGroup,
-    Kbd,
-} from "@dlbcodes/my-design-system";
+import { Badge, Avatar, Button, KbdGroup, Kbd } from "@dlbcodes/ui";
 import {
     PhCopy,
     PhCheck,
@@ -112,11 +106,11 @@ onKeyStroke("k", (e) => {
         <p class="mt-6 max-w-md text-text-secondary">
             I built
             <a
-                href="https://www.npmjs.com/package/@dlbcodes/my-design-system"
+                href="https://www.npmjs.com/package/@dlbcodes/ui"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="text-text-primary underline decoration-border-strong underline-offset-4 outline-none focus-visible:text-brand-100"
-                >dlbcodes/my-design-system</a
+                >@dlbcodes/ui</a
             >, and the templates below to prove it doesn't make every product
             look the same.
         </p>

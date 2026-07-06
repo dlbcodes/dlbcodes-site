@@ -15,7 +15,7 @@ import {
     Input,
     Textarea,
     Button,
-} from "@dlbcodes/my-design-system";
+} from "@dlbcodes/ui";
 import { PhCheck, PhAt } from "@phosphor-icons/vue";
 import { useClipboard } from "@vueuse/core";
 

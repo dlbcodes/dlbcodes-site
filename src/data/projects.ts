@@ -6,7 +6,7 @@ export interface Project {
 
 export const projects: Project[] = [
 	{
-		slug: "dlbcodes/my-design-system",
+		slug: "dlbcodes/ui",
 		href: "https://ui.dlbcodes.com",
 		description:
 			"A compound, tokenized Vue 3 component library. Built on Headless UI.",

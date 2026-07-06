@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
-@import "@dlbcodes/my-design-system/tokens.css";
-@source "../../../node_modules/@dlbcodes/my-design-system/dist";
+@import "@dlbcodes/ui/tokens.css";
+@source "../../../node_modules/@dlbcodes/ui/dist";
 @import "./fonts.css" layer(utilities);
 
 @theme {
