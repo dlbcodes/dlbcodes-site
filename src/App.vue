@@ -13,6 +13,8 @@ import CommandPalette from "./components/CommandPalette.vue";
 import TemplateShowcase from "./components/TemplateShowcase.vue";
 import { projects } from "./data/projects";
 import { site } from "./data/site";
+import Vue from "./assets/icons/vue.vue";
+import Nuxt from "./assets/icons/nuxt.vue";
 
 const contactOpen = ref(false);
 const commandOpen = ref(false);
@@ -41,7 +43,7 @@ onKeyStroke("k", (e) => {
         <Button
             variant="outline"
             size="icon-sm"
-            class="mb-4"
+            class="mb-4 hidden md:flex"
             aria-label="Open command palette"
             @click="commandOpen = true"
         >

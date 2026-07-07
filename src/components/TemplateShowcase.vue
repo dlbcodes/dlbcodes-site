@@ -1,9 +1,16 @@
-<!-- components/TemplateShowcase.vue -->
 <script setup lang="ts">
 import { ref } from "vue";
-import { PhArrowRight, PhArrowUpRight } from "@phosphor-icons/vue";
+import { PhArrowRight, PhArrowUpRight, PhInfo } from "@phosphor-icons/vue";
+import {
+    Badge,
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+    Button,
+} from "@dlbcodes/ui";
 import { projects } from "../data/projects";
 import TemplatePreview from "./TemplatePreview.vue";
+import { techIcons } from "../data/techIcons";
 
 const withImages = projects.filter((p) => p.images?.length);
 
@@ -21,9 +28,49 @@ const openPreview = (images: string[], index: number) => {
 <template>
     <section aria-label="Template screenshots" class="mt-16 space-y-12">
         <div v-for="p in withImages" :key="p.slug">
-            <p class="flex gap-x-2 font-mono text-sm text-text-primary">
-                {{ p.slug }}
-            </p>
+            <div class="flex items-center gap-x-1.5">
+                <p
+                    class="font-mono text-sm leading-none text-text-primary pb-1"
+                >
+                    {{ p.slug }}
+                </p>
+
+                <Popover placement="top">
+                    <PopoverTrigger as-child v-slot="{ open }">
+                        <Button
+                            variant="icon"
+                            size="icon-sm"
+                            aria-label="Tech stack"
+                            class="text-text-tertiary"
+                            :class="open ? 'bg-bg-subtle' : ''"
+                        >
+                            <PhInfo class="size-4" />
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent size="sm" class="p-3">
+                        <p class="mb-2 font-mono text-xs text-text-secondary">
+                            Stack
+                        </p>
+                        <ul class="flex flex-wrap gap-1.5">
+                            <li v-for="tech in p.stack" :key="tech">
+                                <Badge
+                                    variant="neutral"
+                                    class="flex items-center gap-1.5"
+                                >
+                                    <img
+                                        v-if="techIcons[tech]"
+                                        :src="techIcons[tech]"
+                                        :alt="''"
+                                        class="size-3.5"
+                                        aria-hidden="true"
+                                    />
+                                    {{ tech }}
+                                </Badge>
+                            </li>
+                        </ul>
+                    </PopoverContent>
+                </Popover>
+            </div>
 
             <div class="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
                 <button

@@ -3,6 +3,7 @@ export interface Project {
 	href: string;
 	repo?: string;
 	description: string;
+	stack?: string[];
 	images?: string[];
 }
 
@@ -13,6 +14,7 @@ export const projects: Project[] = [
 		repo: "https://github.com/dlbcodes/dlbcodes-ui",
 		description:
 			"A compound, tokenized Vue 3 component library. Built on Headless UI.",
+		stack: ["Vue 3", "TypeScript", "Tailwind v4", "Vite"],
 
 	},
 	{
@@ -21,6 +23,7 @@ export const projects: Project[] = [
 		repo: "https://github.com/dlbcodes/dlbcodes-assistant",
 		description:
 			"Soft, conversational template — a consumer AI-assistant UI.",
+		stack: ["Vue 3", "TypeScript", "Tailwind v4", "Vite"],
 		images: [
 			"/images/assistant/Home.png",
 			"/images/assistant/ComposerWithFiles.png",
@@ -34,6 +37,7 @@ export const projects: Project[] = [
 		repo: "https://github.com/dlbcodes/dlbcodes-console",
 		description:
 			"Dense, Vercel-style dashboard. Same library, opposite look.",
+		stack: ["Vue 3", "TypeScript", "Tailwind v4", "Vite"],
 		images: [
 			"/images/console/Home.png",
 			"/images/console/WorkspaceSwitcher.png",
@@ -47,6 +51,7 @@ export const projects: Project[] = [
 		repo: "https://github.com/dlbcodes/dlbcodes-playground",
 		description:
 			"Live customizer — reskin every component by swapping tokens.",
+		stack: ["Vue 3", "TypeScript", "Tailwind v4", "Vite"],
 		images: [
 			"/images/playground/Home.png",
 			"/images/playground/Neutral.png",
@@ -60,6 +65,7 @@ export const projects: Project[] = [
 		repo: "https://github.com/dlbcodes/dlbcodes-amalia-chat",
 		description:
 			"The assistant UI, wired to AMALIA — Portugal's open-source LLM.",
+		stack: ["Nuxt 4", "TypeScript", "Tailwind v4"],
 		images: [
 			"/images/amalia/Home.png",
 			"/images/amalia/Sidebar.png",
