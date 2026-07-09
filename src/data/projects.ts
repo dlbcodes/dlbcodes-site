@@ -18,6 +18,18 @@ export const projects: Project[] = [
 
 	},
 	{
+		slug: "dlbcodes/blocks",
+		href: "https://blocks.dlbcodes.com",
+		description:
+			"Copy-paste UI blocks built with @dlbcodes/ui",
+		stack: ["Vue 3", "TypeScript", "Tailwind v4", "Vite"],
+		images: [
+			"/images/blocks/Home.png",
+			"/images/blocks/Navbar.png",
+			"/images/blocks/Footer.png",
+		],
+	},
+	{
 		slug: "dlbcodes/assistant",
 		href: "https://assistant.dlbcodes.com",
 		repo: "https://github.com/dlbcodes/dlbcodes-assistant",

@@ -89,7 +89,7 @@ const openPreview = (images: string[], index: number) => {
                         :src="src"
                         :alt="`${p.slug} screenshot ${i + 1}`"
                         loading="lazy"
-                        class="aspect-16/10 w-full object-cover object-top-right transition-transform duration-200 group-hover/thumb:scale-[1.02]"
+                        class="aspect-16/10 w-full object-cover object-top-left transition-transform duration-200 group-hover/thumb:scale-[1.02]"
                     />
                 </button>
             </div>
