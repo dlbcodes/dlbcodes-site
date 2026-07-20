@@ -101,7 +101,7 @@ onKeyStroke("k", (e) => {
         <h1
             class="font-display text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl pt-2"
         >
-            I'm Daniel, a frontend developer and indie founder based in Porto.
+            I'm Daniel, a frontend developer and explorer based in Porto.
         </h1>
 
         <p class="mt-6 max-w-md text-text-secondary">

@@ -18,15 +18,16 @@ export const projects: Project[] = [
 
 	},
 	{
-		slug: "dlbcodes/blocks",
-		href: "https://blocks.dlbcodes.com",
+		slug: "zephr.dev",
+		href: "https://zephr.dev",
 		description:
-			"Copy-paste UI blocks built with @dlbcodes/ui",
-		stack: ["Vue 3", "TypeScript", "Tailwind v4", "Vite"],
+			"Ship components your whole team can actually use.",
+		stack: ["Nuxt 4", "TypeScript", "Tailwind v4", "Vite"],
 		images: [
-			"/images/blocks/Home.png",
-			"/images/blocks/Navbar.png",
-			"/images/blocks/Footer.png",
+			"/images/zephr/Home.png",
+			"/images/zephr/HowItWorks.png",
+			"/images/zephr/Dashboard.png",
+			"/images/zephr/Sidebar.png",
 		],
 	},
 	{
